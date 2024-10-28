@@ -18,6 +18,8 @@ jobs:
   build:
     needs: test
     runs-on: ubuntu-latest
+    outputs:
+      script-file: ${{steps.publish-js.outputs.script-file}}
     steps:
       - name: Get code
         uses: actions/checkout@v3
@@ -26,7 +28,8 @@ jobs:
       - name: Build website
         run: npm run build # after job done machine will stop automatically and build files will be lost
       - name: Publish JS filename
-        run: find dist/assets/*.js -type f -execdir echo '{}' ';'
+        id: publish-js
+        run: find dist/assets/*.js -type f -execdir echo 'script-file={}' >> $GITHUB_OUTPUT ';'
       - name: Upload Artifacts
         uses: actions/upload-artifact@v3
         with:
@@ -45,5 +48,13 @@ jobs:
           name: dist-files
       - name: Output Contents
         run: ls
+      - name: Output needs
+        run: echo "${{needs}}"
+      - name: Output build
+        run: echo "${{needs.build}}"
+      - name: Output output
+        run: echo "${{needs.build.outputs}}"
+      - name: Output script-file
+        run: echo "${{needs.build.outputs.script-file}}"
       - name: Deploy
         run: echo "Deploying..."
