@@ -49,11 +49,11 @@ jobs:
       - name: Output Contents
         run: ls
       - name: Output needs
-        run: echo "${{needs}}"
+        run: echo "${{toJson(needs)}}"
       - name: Output build
-        run: echo "${{needs.build}}"
+        run: echo "${{toJson(needs.build)}}"
       - name: Output output
-        run: echo "${{needs.build.outputs}}"
+        run: echo "${{toJson(needs.build.outputs)}}"
       - name: Output script-file
         run: echo "${{needs.build.outputs.script-file}}"
       - name: Deploy
